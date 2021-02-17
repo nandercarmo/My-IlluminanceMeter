@@ -15,10 +15,10 @@ int dataReadCount = 0; // controls the number of samples
 
 void setup() {
 
-  Serial.println(115200);
+  Serial.begin(115200);
 
-  pinMode(A0, IchannelsCountPUT);
-  pinMode(A1, IchannelsCountPUT);
+  pinMode(A0, INPUT);
+  pinMode(A1, INPUT);
 
   ADMUX = 0x00; // MUX[3:0] = 0000 -> select analog channel 0, ADLAR = 0 -> AD samples are right adjusted 
   ADMUX |= 0x40; // REFS[1:0] = 01, set voltage reference to AVcc
@@ -35,7 +35,9 @@ void setup() {
   SREG |= 0x80; // enable global interrupts
 
   ADCSRA |= 0x80; // ADEchannelsCount = 1, enable AD converter
-  ADCSRA |= 0x40;// ADSC = 1, start AD conversion  
+  ADCSRA |= 0x40;// ADSC = 1, start AD conversion
+
+  Serial.println("$ Setup finished!");
 }
 
 void loop() {
@@ -45,7 +47,9 @@ void loop() {
 
   if(isProcessing) {
 
-    // Proccess Data
+    char message[100] = "";
+    sprintf(message, "$ isProcessing = %s\n", isProcessing ? "true" : "false");
+    Serial.println(message);
 
     noInterrupts();
     isProcessing = false;
@@ -55,16 +59,22 @@ void loop() {
 
 ISR(ADC_vect) {
 
-  int sample, CH;
+  //Serial.println("$ ISR");
 
+  int sample, CH;
+  
   sample = ADCL; // read the lower byte
   sample += ADCH << 8; // read the upper byte shift by 8 bits left
+
+  // char message[100] = "";
+  // sprintf(message, "$ isProcessing = %s\n", isProcessing ? "true" : "false");
+  // Serial.println(message);
 
   if(!isProcessing) {
 
     CH = ADMUX & 0x0F; // get AD channel
     dataVector[CH][dataReadCount] = sample; // store data read
-
+    
     if(++CH < channelsCount) ADMUX += 1; // verify if all channels were acquired, if not, go to the next channel
     else {
 
