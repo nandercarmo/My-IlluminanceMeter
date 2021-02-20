@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>drop_dow_arrow_16px.png</file>
+    </qresource>
+</RCC>
