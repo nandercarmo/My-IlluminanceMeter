@@ -67,6 +67,7 @@ public:
 "	background-color: #fff;\n"
 "	font-weight: bold;\n"
 "	border-radius: 7px;	\n"
+"	border: 2px solid #bbb;\n"
 "	padding-top: 7px;\n"
 "	padding-bottom: 7px;\n"
 "	padding-left: 14px;\n"
@@ -86,29 +87,16 @@ public:
 "	color: #404042;\n"
 "}\n"
 "\n"
-"QLineEdit {\n"
-"	color: #6f707a;\n"
-"	background-color: #fefefe;\n"
-"	font-weight: bold;\n"
-"	border: 2px solid #bbb;\n"
-"	border-radius: 7px;	\n"
-"	padding-top: 7px;\n"
-"	padding-bottom: 7px;\n"
-"	padding-left: 14px;\n"
-"	padding-right: 14px;\n"
-"}\n"
-"\n"
 "QComboBox {\n"
 "	background-color: #fefefe;	\n"
 "	color: #6f707a;\n"
 "	font-weight: bold;\n"
-"	border: 2px solid #bbb;\n"
 "	border-radius: 7px;	\n"
+"	border: 2px solid #bbb;\n"
 "	padding-top: 7px;\n"
 "	padding-bottom: 7px;\n"
 "	padding-left: 14px;\n"
-"	padding-right: 14"
-                        "px;\n"
+"	padding-right: 14px;\n"
 "}\n"
 "\n"
 "QComboBox:editable {\n"
@@ -122,7 +110,8 @@ public:
 "	background-color: #fefefe;\n"
 "}\n"
 "\n"
-"QComboBox:item:selected {\n"
+"QComb"
+                        "oBox:item:selected {\n"
 "    padding-left: 5px;\n"
 "	background-color: #e0e0e5;\n"
 "}\n"
@@ -305,11 +294,11 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
-        label->setText(QCoreApplication::translate("MainWindow", "Selecione a Porta USB:", nullptr));
-        label_2->setText(QCoreApplication::translate("MainWindow", "Selecione o Baudrate:", nullptr));
-        label_3->setText(QCoreApplication::translate("MainWindow", "Selecione o Prescaler do Clock:", nullptr));
-        label_4->setText(QCoreApplication::translate("MainWindow", "Selecione a Porta Anal\303\263gica", nullptr));
+        MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "My Illuminance Meter UI", nullptr));
+        label->setText(QCoreApplication::translate("MainWindow", "Porta USB:", nullptr));
+        label_2->setText(QCoreApplication::translate("MainWindow", "Baudrate:", nullptr));
+        label_3->setText(QCoreApplication::translate("MainWindow", "Prescaler do Clock:", nullptr));
+        label_4->setText(QCoreApplication::translate("MainWindow", "Porta Anal\303\263gica", nullptr));
         pushButtonStart->setText(QCoreApplication::translate("MainWindow", "Come\303\247ar Leitura", nullptr));
         pushButtonStop->setText(QCoreApplication::translate("MainWindow", "Parar a Leitura", nullptr));
         pushButtonClear->setText(QCoreApplication::translate("MainWindow", "Apagar Gr\303\241fico", nullptr));

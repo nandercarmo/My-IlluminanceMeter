@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include <QtCharts>
- #include <QXYSeries>
 #include <QLineSeries>
 #include "arduinoconnector.h"
 

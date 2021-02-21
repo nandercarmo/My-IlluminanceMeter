@@ -91,7 +91,6 @@ void MainWindow::handleSerialEvent() {
         this->chart->addSeries(this->series);
         this->chart->createDefaultAxes();
         this->chart->axes(Qt::Vertical, this->series).back()->setRange(0, 500);
-        this->chart->axes(Qt::Vertical, this->series).back()->setTitleText("Passo do ADC 0 ~ 1023");
         this->chart->axes(Qt::Horizontal, this->series).back()->setTitleText("Amostras");
 
         this->pointCount++;
@@ -105,12 +104,12 @@ void MainWindow::initChart() {
 
     this->chart = new QChart();
     this->chart->addSeries(series);
-    this->chart->setTitle("Iluminância x Tempo");
+    this->chart->setTitle("Variação da Iluminância no Tempo");
     this->chart->legend()->hide();
     this->chart->createDefaultAxes();
     this->chart->axes(Qt::Vertical, this->series).back()->setRange(0, 500);
-    this->chart->axes(Qt::Vertical, this->series).back()->setTitleText("Passo do ADC 0 ~ 1023");
     this->chart->axes(Qt::Horizontal, this->series).back()->setTitleText("Amostras");
+    this->chart->setTheme(QChart::ChartThemeDark);
 
     QFont font;
     font.setBold(true);
@@ -140,7 +139,7 @@ void MainWindow::fillUSBCombobox() {
 
         QString portname = info.portName();
         QString description = (!info.description().isEmpty() ? info.description() : "N/A");
-        QString item = portname + "(" + description + ")";
+        QString item = portname + " (" + description + ")";
 
         ui->comboBoxUSB->addItem(item, portname);
     }
