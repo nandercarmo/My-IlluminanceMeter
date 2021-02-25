@@ -73,7 +73,8 @@ void loop() {
   
         for(uint8_t j = 0; j < dataBufferSize; j++) {
   
-          Serial.print((uint16_t) dataVector[i][j]);
+          Serial.println((int) dataVector[i][j]);
+          delay(1);
         }
       }
   

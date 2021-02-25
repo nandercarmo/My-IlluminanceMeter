@@ -28,8 +28,8 @@ public:
     QWidget *centralwidget;
     QWidget *horizontalLayoutWidget;
     QHBoxLayout *horizontalLayout;
-    QWidget *chartWidget;
     QSpacerItem *horizontalSpacer;
+    QWidget *chartWidget;
     QVBoxLayout *verticalLayout_2;
     QVBoxLayout *verticalLayout;
     QLabel *label;
@@ -148,24 +148,25 @@ public:
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         horizontalLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
         horizontalLayout->setContentsMargins(10, 10, 10, 10);
+        horizontalSpacer = new QSpacerItem(0, 20, QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer);
+
         chartWidget = new QWidget(horizontalLayoutWidget);
         chartWidget->setObjectName(QString::fromUtf8("chartWidget"));
 
         horizontalLayout->addWidget(chartWidget);
 
-        horizontalSpacer = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Minimum);
-
-        horizontalLayout->addItem(horizontalSpacer);
-
         verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setSpacing(7);
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
-        verticalLayout_2->setSizeConstraint(QLayout::SetMaximumSize);
-        verticalLayout_2->setContentsMargins(20, 20, 20, 20);
+        verticalLayout_2->setSizeConstraint(QLayout::SetNoConstraint);
+        verticalLayout_2->setContentsMargins(10, 20, 10, 20);
         verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         label = new QLabel(horizontalLayoutWidget);
         label->setObjectName(QString::fromUtf8("label"));
+        label->setMaximumSize(QSize(275, 16777215));
         label->setStyleSheet(QString::fromUtf8("QLabel {\n"
 "	margin-left: 5px;\n"
 "}"));
@@ -176,6 +177,7 @@ public:
         comboBoxUSB = new QComboBox(horizontalLayoutWidget);
         comboBoxUSB->setObjectName(QString::fromUtf8("comboBoxUSB"));
         comboBoxUSB->setMinimumSize(QSize(0, 50));
+        comboBoxUSB->setMaximumSize(QSize(275, 16777215));
         comboBoxUSB->setStyleSheet(QString::fromUtf8(""));
 
         verticalLayout->addWidget(comboBoxUSB);
@@ -187,6 +189,7 @@ public:
         verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
         label_2 = new QLabel(horizontalLayoutWidget);
         label_2->setObjectName(QString::fromUtf8("label_2"));
+        label_2->setMaximumSize(QSize(275, 16777215));
         label_2->setStyleSheet(QString::fromUtf8("QLabel {\n"
 "	margin-top:  10px;\n"
 "	margin-left: 5px;\n"
@@ -198,6 +201,7 @@ public:
         comboBoxBaudrate = new QComboBox(horizontalLayoutWidget);
         comboBoxBaudrate->setObjectName(QString::fromUtf8("comboBoxBaudrate"));
         comboBoxBaudrate->setMinimumSize(QSize(50, 50));
+        comboBoxBaudrate->setMaximumSize(QSize(275, 16777215));
 
         verticalLayout_4->addWidget(comboBoxBaudrate);
 
@@ -205,6 +209,7 @@ public:
         verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
         label_3 = new QLabel(horizontalLayoutWidget);
         label_3->setObjectName(QString::fromUtf8("label_3"));
+        label_3->setMaximumSize(QSize(275, 16777215));
         label_3->setStyleSheet(QString::fromUtf8("QLabel {\n"
 "	margin-top:  10px;\n"
 "	margin-left: 5px;\n"
@@ -216,6 +221,7 @@ public:
         comboBoxPrescaler = new QComboBox(horizontalLayoutWidget);
         comboBoxPrescaler->setObjectName(QString::fromUtf8("comboBoxPrescaler"));
         comboBoxPrescaler->setMinimumSize(QSize(0, 50));
+        comboBoxPrescaler->setMaximumSize(QSize(275, 16777215));
 
         verticalLayout_5->addWidget(comboBoxPrescaler);
 
@@ -229,6 +235,7 @@ public:
         verticalLayout_6->setObjectName(QString::fromUtf8("verticalLayout_6"));
         label_4 = new QLabel(horizontalLayoutWidget);
         label_4->setObjectName(QString::fromUtf8("label_4"));
+        label_4->setMaximumSize(QSize(275, 16777215));
         label_4->setStyleSheet(QString::fromUtf8("QLabel {\n"
 "	margin-top:  10px;\n"
 "	margin-left: 5px;\n"
@@ -239,7 +246,8 @@ public:
 
         comboBoxPort = new QComboBox(horizontalLayoutWidget);
         comboBoxPort->setObjectName(QString::fromUtf8("comboBoxPort"));
-        comboBoxPort->setMinimumSize(QSize(0, 50));
+        comboBoxPort->setMinimumSize(QSize(275, 50));
+        comboBoxPort->setMaximumSize(QSize(275, 16777215));
 
         verticalLayout_6->addWidget(comboBoxPort);
 
@@ -277,7 +285,7 @@ public:
 
         pushButtonClear = new QPushButton(horizontalLayoutWidget);
         pushButtonClear->setObjectName(QString::fromUtf8("pushButtonClear"));
-        pushButtonClear->setMinimumSize(QSize(0, 50));
+        pushButtonClear->setMinimumSize(QSize(275, 50));
         pushButtonClear->setMaximumSize(QSize(275, 16777215));
 
         verticalLayout_2->addWidget(pushButtonClear);

@@ -63,9 +63,9 @@ void MainWindow::startListenning() {
         this->arduinoConnector.sendData(char(this->arduinoConnector.START_READ));
         this->arduinoConnector.sendData(prescaler.toLatin1());
         this->arduinoConnector.sendData(port.toLatin1());
-    }
 
-    connect(this->arduinoConnector.serial, &QSerialPort::readyRead, this, &MainWindow::handleSerialEvent);
+        connect(this->arduinoConnector.serial, &QSerialPort::readyRead, this, &MainWindow::handleSerialEvent);
+    }
 }
 
 void MainWindow::stopListenning() {
@@ -79,23 +79,26 @@ void MainWindow::stopListenning() {
 
 void MainWindow::handleSerialEvent() {
 
-    QByteArray data = this->arduinoConnector.readData();
+    while(this->arduinoConnector.bytesAvailable()) {
 
-    if(!data.isEmpty()) {
+        QByteArray data = this->arduinoConnector.readData();
 
-        qDebug() << "Int:" << data.toInt();
+        if(!data.isEmpty()) {
 
-        this->chart->removeSeries(this->series);
-        this->series->append(this->pointCount + 1, data.toInt());
-        if(this->series->count() > 200) this->series->remove(0);
-        this->chart->addSeries(this->series);
-        this->chart->createDefaultAxes();
-        this->chart->axes(Qt::Vertical, this->series).back()->setRange(0, 500);
-        this->chart->axes(Qt::Horizontal, this->series).back()->setTitleText("Amostras");
+            qDebug() << "Int:" << data.toInt();
 
-        this->pointCount++;
+            this->chart->removeSeries(this->series);
+            this->series->append(this->pointCount + 1, data.toInt());
+            if(this->series->count() > 200) this->series->remove(0);
+            this->chart->addSeries(this->series);
+            this->chart->createDefaultAxes();
+            this->chart->axes(Qt::Vertical, this->series).back()->setRange(0, 1023);
+            this->chart->axes(Qt::Horizontal, this->series).back()->setTitleText("Amostras");
 
-    } else qDebug() << "Erro recebendo dados da USB";
+            this->pointCount++;
+
+        } else qDebug() << "Erro recebendo dados da USB";
+    }
 }
 
 void MainWindow::initChart() {
@@ -107,7 +110,7 @@ void MainWindow::initChart() {
     this->chart->setTitle("Variação da Iluminância no Tempo");
     this->chart->legend()->hide();
     this->chart->createDefaultAxes();
-    this->chart->axes(Qt::Vertical, this->series).back()->setRange(0, 500);
+    this->chart->axes(Qt::Vertical, this->series).back()->setRange(0, 1023);
     this->chart->axes(Qt::Horizontal, this->series).back()->setTitleText("Amostras");
     this->chart->setTheme(QChart::ChartThemeDark);
 

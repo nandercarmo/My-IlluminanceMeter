@@ -77,6 +77,10 @@ qint64 ArduinoConnector::bytesAvailable(){
 
 QByteArray ArduinoConnector::readData() {
 
-    QByteArray data = this->serial->readLine(sizeof (uint16_t) + 1);
-    return data;
+    char data[20];
+
+    this->serial->readLine(data, sizeof (data));
+    //qDebug() << data.fromHex(data);
+    QByteArray data2 = QByteArray(data);
+    return data2;
 }

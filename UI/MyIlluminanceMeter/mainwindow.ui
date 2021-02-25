@@ -129,9 +129,6 @@ QComboBox::down-arrow:on {
       <number>10</number>
      </property>
      <item>
-      <widget class="QWidget" name="chartWidget" native="true"/>
-     </item>
-     <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -142,10 +139,13 @@ QComboBox::down-arrow:on {
        <property name="sizeHint" stdset="0">
         <size>
          <width>0</width>
-         <height>0</height>
+         <height>20</height>
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QWidget" name="chartWidget" native="true"/>
      </item>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -153,16 +153,16 @@ QComboBox::down-arrow:on {
         <number>7</number>
        </property>
        <property name="sizeConstraint">
-        <enum>QLayout::SetMaximumSize</enum>
+        <enum>QLayout::SetNoConstraint</enum>
        </property>
        <property name="leftMargin">
-        <number>20</number>
+        <number>10</number>
        </property>
        <property name="topMargin">
         <number>20</number>
        </property>
        <property name="rightMargin">
-        <number>20</number>
+        <number>10</number>
        </property>
        <property name="bottomMargin">
         <number>20</number>
@@ -171,6 +171,12 @@ QComboBox::down-arrow:on {
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
           <widget class="QLabel" name="label">
+           <property name="maximumSize">
+            <size>
+             <width>275</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="styleSheet">
             <string notr="true">QLabel {
 	margin-left: 5px;
@@ -192,6 +198,12 @@ QComboBox::down-arrow:on {
              <height>50</height>
             </size>
            </property>
+           <property name="maximumSize">
+            <size>
+             <width>275</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="styleSheet">
             <string notr="true"/>
            </property>
@@ -203,6 +215,12 @@ QComboBox::down-arrow:on {
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
           <widget class="QLabel" name="label_2">
+           <property name="maximumSize">
+            <size>
+             <width>275</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="styleSheet">
             <string notr="true">QLabel {
 	margin-top:  10px;
@@ -225,12 +243,24 @@ QComboBox::down-arrow:on {
              <height>50</height>
             </size>
            </property>
+           <property name="maximumSize">
+            <size>
+             <width>275</width>
+             <height>16777215</height>
+            </size>
+           </property>
           </widget>
          </item>
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_5">
            <item>
             <widget class="QLabel" name="label_3">
+             <property name="maximumSize">
+              <size>
+               <width>275</width>
+               <height>16777215</height>
+              </size>
+             </property>
              <property name="styleSheet">
               <string notr="true">QLabel {
 	margin-top:  10px;
@@ -253,6 +283,12 @@ QComboBox::down-arrow:on {
                <height>50</height>
               </size>
              </property>
+             <property name="maximumSize">
+              <size>
+               <width>275</width>
+               <height>16777215</height>
+              </size>
+             </property>
             </widget>
            </item>
           </layout>
@@ -263,6 +299,12 @@ QComboBox::down-arrow:on {
         <layout class="QVBoxLayout" name="verticalLayout_6">
          <item>
           <widget class="QLabel" name="label_4">
+           <property name="maximumSize">
+            <size>
+             <width>275</width>
+             <height>16777215</height>
+            </size>
+           </property>
            <property name="styleSheet">
             <string notr="true">QLabel {
 	margin-top:  10px;
@@ -281,8 +323,14 @@ QComboBox::down-arrow:on {
           <widget class="QComboBox" name="comboBoxPort">
            <property name="minimumSize">
             <size>
-             <width>0</width>
+             <width>275</width>
              <height>50</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>275</width>
+             <height>16777215</height>
             </size>
            </property>
           </widget>
@@ -361,7 +409,7 @@ QPushButton:hover {
         <widget class="QPushButton" name="pushButtonClear">
          <property name="minimumSize">
           <size>
-           <width>0</width>
+           <width>275</width>
            <height>50</height>
           </size>
          </property>
