@@ -18,7 +18,7 @@ In order to stabilize the power supply signal, we built a simple low-pass filter
 Finally, as a signal conditioner, we developed a bessel active 3rd order anti-aliasing filter set to a frequency of 1kHz (the projected minimum acquisition frequency is around 9kHz) that allows us to respect the Nyquist-Shannon criterion.
 
 <p align="center">
-  <img src="images/bpw34.png" width="750" title="hover text">
+  <img src="images/filter.png" width="750" title="hover text">
 </p>
 
 ## Prototype
