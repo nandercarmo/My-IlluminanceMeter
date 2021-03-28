@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QtCharts>
 #include <QLineSeries>
+#include <cmath>
+
 #include "arduinoconnector.h"
 
 QT_BEGIN_NAMESPACE
@@ -20,13 +22,26 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    QLineSeries * series;
-    QChart * chart;
-    QChartView * chartView;
+    QLineSeries * voltageSerie;
+    QLineSeries * luxSerie;
+    QChart * voltageChart;
+    QChart * luxChart;
+    QChartView * voltageChartView;
+    QChartView * luxChartView;
     ArduinoConnector arduinoConnector;
     long pointCount = 0;
 
-    void initChart();
+    int ADC_MAX_VALUE = 1023;
+    int MIN_VOLTAGE = 0;
+    int MAX_VOLTAGE = 5;
+    int MIN_LUX = 0;
+    int MAX_LUX = 7000;
+
+    void initVoltageChart();
+    void initLuxChart();
+    void convertValueReceived(double);
+    void addPointToSeries(double, double);
+    void updateSeries();
     void fillUSBCombobox();
     void fillBaudrateCombobox();
     void fillPrescalerCombobox();

@@ -48,23 +48,6 @@ void loop() {
 
   handleSerial();
   
-  ADMUX = ANALOG_CHANNEL; // MUX[3:0] = 0000 -> select analog channel 0, ADLAR = 0 -> AD samples are right adjusted 
-  ADMUX |= VOLTAGE_REF; // REFS[1:0] = 01, set voltage reference to AVcc
-
-  ADCSRA = RESET;
-  ADCSRA |= PRESCALER; // ADPS[2:0] = 111, set prescaler to 128 -> fs = 4807.69Hz (2 channels)
-  ADCSRA |= EN_ADC_IRQ; // ADIE = 1, enable ADC interrupts
-  ADCSRA |= EN_ADC_AUTO_TRIGGER; // ADATE = 1, enable auto-trigger
-
-  ADCSRB = FREE_RUNNING_MODE; // ACME = 0, ADTS[2:0] = 000 -> trigger source = free running mode
-
-  DIDR0 = DIS_ADC_DIG; // disable the ADC digital input buffers
-
-  SREG |= EN_GLOBAL_IRQ; // enable global interrupts
-
-  ADCSRA |= MUST_READ; // ADEN = 1, enable AD converter
-  ADCSRA |= ADC_START;// ADSC = 1, start AD conversion
-  
   while(MUST_READ == START_READ) {
 
     if(isProcessing) {
@@ -102,25 +85,44 @@ void handleSerial() {
 
       ANALOG_CHANNEL = Serial.read();
       MUST_READ = START_READ;
-
       
     } else MUST_READ = STOP_READ;
+
+    resetRegisters();
   }
 }
 
-ISR(ADC_vect) {
+void resetRegisters() {
 
-  //Serial.println("$ ISR");
+  noInterrupts();
+
+  ADMUX = ANALOG_CHANNEL; // MUX[3:0] = 0000 -> select analog channel 0, ADLAR = 0 -> AD samples are right adjusted 
+  ADMUX |= VOLTAGE_REF; // REFS[1:0] = 01, set voltage reference to AVcc
+
+  ADCSRA = RESET;
+  ADCSRA |= PRESCALER; // ADPS[2:0] = 111, set prescaler to 128 -> fs = 4807.69Hz (2 channels)
+  ADCSRA |= EN_ADC_IRQ; // ADIE = 1, enable ADC interrupts
+  ADCSRA |= EN_ADC_AUTO_TRIGGER; // ADATE = 1, enable auto-trigger
+
+  ADCSRB = FREE_RUNNING_MODE; // ACME = 0, ADTS[2:0] = 000 -> trigger source = free running mode
+
+  DIDR0 = DIS_ADC_DIG; // disable the ADC digital input buffers
+
+  SREG |= EN_GLOBAL_IRQ; // enable global interrupts
+
+  ADCSRA |= MUST_READ; // ADEN = 1, enable AD converter
+  ADCSRA |= ADC_START;// ADSC = 1, start AD conversion
+
+  interrupts();
+}
+
+ISR(ADC_vect) {
 
   uint16_t sample;
   uint8_t CH;
   
   sample = ADCL; // read the lower byte
   sample += ADCH << 8; // read the upper byte shift by 8 bits left
-
-//  char message[100] = "";
-//  sprintf(message, "$ isProcessing = %s\n", isProcessing ? "true" : "false");
-//  Serial.println(message);
 
   if(!isProcessing) {
 
@@ -139,6 +141,5 @@ ISR(ADC_vect) {
       dataReadCount = 0; // data vector full, restart dataReadCount
       isProcessing = true; // set the flag to start processing
     }
-    
   }
 }

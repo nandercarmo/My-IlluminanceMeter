@@ -145,7 +145,14 @@ QComboBox::down-arrow:on {
       </spacer>
      </item>
      <item>
-      <widget class="QWidget" name="chartWidget" native="true"/>
+      <layout class="QVBoxLayout" name="verticalLayout_7">
+       <item>
+        <widget class="QWidget" name="chartLuxWidget" native="true"/>
+       </item>
+       <item>
+        <widget class="QWidget" name="chartVoltageWidget" native="true"/>
+       </item>
+      </layout>
      </item>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">

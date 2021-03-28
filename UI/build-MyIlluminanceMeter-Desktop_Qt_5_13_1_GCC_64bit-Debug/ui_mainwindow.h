@@ -29,7 +29,9 @@ public:
     QWidget *horizontalLayoutWidget;
     QHBoxLayout *horizontalLayout;
     QSpacerItem *horizontalSpacer;
-    QWidget *chartWidget;
+    QVBoxLayout *verticalLayout_7;
+    QWidget *chartLuxWidget;
+    QWidget *chartVoltageWidget;
     QVBoxLayout *verticalLayout_2;
     QVBoxLayout *verticalLayout;
     QLabel *label;
@@ -152,10 +154,20 @@ public:
 
         horizontalLayout->addItem(horizontalSpacer);
 
-        chartWidget = new QWidget(horizontalLayoutWidget);
-        chartWidget->setObjectName(QString::fromUtf8("chartWidget"));
+        verticalLayout_7 = new QVBoxLayout();
+        verticalLayout_7->setObjectName(QString::fromUtf8("verticalLayout_7"));
+        chartLuxWidget = new QWidget(horizontalLayoutWidget);
+        chartLuxWidget->setObjectName(QString::fromUtf8("chartLuxWidget"));
 
-        horizontalLayout->addWidget(chartWidget);
+        verticalLayout_7->addWidget(chartLuxWidget);
+
+        chartVoltageWidget = new QWidget(horizontalLayoutWidget);
+        chartVoltageWidget->setObjectName(QString::fromUtf8("chartVoltageWidget"));
+
+        verticalLayout_7->addWidget(chartVoltageWidget);
+
+
+        horizontalLayout->addLayout(verticalLayout_7);
 
         verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setSpacing(7);

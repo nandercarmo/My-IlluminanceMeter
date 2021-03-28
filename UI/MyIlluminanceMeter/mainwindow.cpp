@@ -14,9 +14,13 @@ MainWindow::MainWindow(QWidget *parent)
     this->fillPrescalerCombobox();
     this->fillPortCombobox();
 
-    this->initChart();
+    this->initVoltageChart();
+    this->initLuxChart();
 
-    QLayoutItem * previousWidget = ui->horizontalLayout->replaceWidget(ui->chartWidget, this->chartView);
+    QLayoutItem * previousWidget = ui->horizontalLayout->replaceWidget(ui->chartVoltageWidget, this->voltageChartView);
+    delete previousWidget;
+
+    previousWidget = ui->horizontalLayout->replaceWidget(ui->chartLuxWidget, this->luxChartView);
     delete previousWidget;
 
     connect(ui->pushButtonStart, &QPushButton::clicked, this, &MainWindow::startListenning);
@@ -46,14 +50,15 @@ void MainWindow::startListenning() {
             qDebug() << "Conexão USB aberta!";
             this->arduinoConnector.isConnected = true;
 
+            this->startListenning();
+
         } else {
 
             qDebug() << "Erro tentando abrir conexão: " << error;
             this->arduinoConnector.isConnected = false;
         }
-    }
 
-    if(arduinoConnector.isConnected) {
+    } else {
 
         clearChart();
 
@@ -79,49 +84,67 @@ void MainWindow::stopListenning() {
 
 void MainWindow::handleSerialEvent() {
 
+    this->voltageChart->removeSeries(this->voltageSerie);
+    this->luxChart->removeSeries(this->luxSerie);
+
     while(this->arduinoConnector.bytesAvailable()) {
 
-        QByteArray data = this->arduinoConnector.readData();
+        if(this->arduinoConnector.receivedNewData()) {
 
-        if(!data.isEmpty()) {
+            QByteArray data = this->arduinoConnector.readData();
 
-            qDebug() << "Int:" << data.toInt();
-
-            this->chart->removeSeries(this->series);
-            this->series->append(this->pointCount + 1, data.toInt());
-            if(this->series->count() > 200) this->series->remove(0);
-            this->chart->addSeries(this->series);
-            this->chart->createDefaultAxes();
-            this->chart->axes(Qt::Vertical, this->series).back()->setRange(0, 1023);
-            this->chart->axes(Qt::Horizontal, this->series).back()->setTitleText("Amostras");
-
-            this->pointCount++;
-
-        } else qDebug() << "Erro recebendo dados da USB";
+            if(!data.isEmpty()) this->convertValueReceived(1.0 * data.toInt());
+            else qDebug() << "Erro recebendo dados da USB";
+        }
     }
+
+    this->updateSeries();
 }
 
-void MainWindow::initChart() {
+void MainWindow::initVoltageChart() {
 
-    this->series = new QLineSeries();
+    this->voltageSerie = new QLineSeries();
 
-    this->chart = new QChart();
-    this->chart->addSeries(series);
-    this->chart->setTitle("Variação da Iluminância no Tempo");
-    this->chart->legend()->hide();
-    this->chart->createDefaultAxes();
-    this->chart->axes(Qt::Vertical, this->series).back()->setRange(0, 1023);
-    this->chart->axes(Qt::Horizontal, this->series).back()->setTitleText("Amostras");
-    this->chart->setTheme(QChart::ChartThemeDark);
+    this->voltageChart = new QChart();
+    this->voltageChart->addSeries(this->voltageSerie);
+    this->voltageChart->setTitle("Variação da Tensão  [ V ]");
+    this->voltageChart->legend()->hide();
+    this->voltageChart->createDefaultAxes();
+    this->voltageChart->axes(Qt::Vertical, this->voltageSerie).back()->setRange(this->MIN_VOLTAGE, this->MAX_VOLTAGE);
+    this->voltageChart->axes(Qt::Horizontal, this->voltageSerie).back()->setTitleText("Amostras");
+    this->voltageChart->setTheme(QChart::ChartThemeDark);
 
     QFont font;
     font.setBold(true);
     font.setPixelSize(16);
-    this->chart->setTitleFont(font);
+    this->voltageChart->setTitleFont(font);
 
-    this->chartView = new QChartView(chart);
-    this->chartView->setRenderHint(QPainter::Antialiasing);
-    this->chartView->setStyleSheet("background-color: #e0e0e5;");
+    this->voltageChartView = new QChartView(this->voltageChart);
+    this->voltageChartView->setRenderHint(QPainter::Antialiasing);
+    this->voltageChartView->setStyleSheet("background-color: #e0e0e5;");
+}
+
+void MainWindow::initLuxChart() {
+
+    this->luxSerie = new QLineSeries();
+
+    this->luxChart = new QChart();
+    this->luxChart->addSeries(this->luxSerie);
+    this->luxChart->setTitle("Variação da Iluminância  [ lx ]");
+    this->luxChart->legend()->hide();
+    this->luxChart->createDefaultAxes();
+    this->luxChart->axes(Qt::Vertical, this->luxSerie).back()->setRange(this->MIN_LUX, this->MAX_LUX);
+    this->luxChart->axes(Qt::Horizontal, this->luxSerie).back()->setTitleText("Amostras");
+    this->luxChart->setTheme(QChart::ChartThemeDark);
+
+    QFont font;
+    font.setBold(true);
+    font.setPixelSize(16);
+    this->luxChart->setTitleFont(font);
+
+    this->luxChartView = new QChartView(this->luxChart);
+    this->luxChartView->setRenderHint(QPainter::Antialiasing);
+    this->luxChartView->setStyleSheet("background-color: #e0e0e5;");
 }
 
 void MainWindow::clearChart() {
@@ -130,9 +153,58 @@ void MainWindow::clearChart() {
 
     this->pointCount = 0;
 
-    this->chart->removeSeries(this->series);
-    this->series->clear();
-    this->chart->addSeries(this->series);
+    this->voltageChart->removeSeries(this->voltageSerie);
+    this->voltageSerie->clear();
+    this->voltageChart->addSeries(this->voltageSerie);
+
+    this->luxChart->removeSeries(this->luxSerie);
+    this->luxSerie->clear();
+    this->luxChart->addSeries(this->luxSerie);
+}
+
+void MainWindow::convertValueReceived(double newValue) {
+
+    double voltageValue;
+    voltageValue = newValue / this->ADC_MAX_VALUE;
+    voltageValue *= this->MAX_VOLTAGE;
+
+    double luxValue = 0.0;
+    luxValue -= 9.2017399997558357E1 * pow(voltageValue * 1000.0, 0.0);
+    luxValue += 5.6925744486746090E0 * pow(voltageValue * 1000.0, 1.0);
+    luxValue -= 7.3489975622013995E-3 * pow(voltageValue * 1000.0, 2.0);
+    luxValue += 6.1085988832089932E-6 * pow(voltageValue * 1000.0, 3.0);
+    luxValue -= 2.3966391086544928E-9 * pow(voltageValue * 1000.0, 4.0);
+    luxValue += 3.7174706249698862E-13 * pow(voltageValue * 1000.0, 5.0);
+
+    qDebug() << "Bits:" << newValue;
+    qDebug() << "Voltage:" << voltageValue;
+    qDebug() << "Lux:" << luxValue;
+
+    this->addPointToSeries(voltageValue, luxValue);
+
+    this->pointCount++;
+}
+
+void MainWindow::addPointToSeries(double newVoltageValue, double newLuxValue) {
+
+    this->voltageSerie->append(this->pointCount + 1, newVoltageValue);
+    if(this->voltageSerie->count() > 1000) this->voltageSerie->remove(0);
+
+    this->luxSerie->append(this->pointCount + 1, newLuxValue);
+    if(this->luxSerie->count() > 1000) this->luxSerie->remove(0);
+}
+
+void MainWindow::updateSeries() {
+
+    this->voltageChart->addSeries(this->voltageSerie);
+    this->voltageChart->createDefaultAxes();
+    this->voltageChart->axes(Qt::Vertical, this->voltageSerie).back()->setRange(this->MIN_VOLTAGE, this->MAX_VOLTAGE);
+    this->voltageChart->axes(Qt::Horizontal, this->voltageSerie).back()->setTitleText("Amostras");
+
+    this->luxChart->addSeries(this->luxSerie);
+    this->luxChart->createDefaultAxes();
+    this->luxChart->axes(Qt::Vertical, this->luxSerie).back()->setRange(this->MIN_LUX, this->MAX_LUX);
+    this->luxChart->axes(Qt::Horizontal, this->luxSerie).back()->setTitleText("Amostras");
 }
 
 void MainWindow::fillUSBCombobox() {

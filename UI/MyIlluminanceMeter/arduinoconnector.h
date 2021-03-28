@@ -19,6 +19,7 @@ public:
     QByteArray readData();
     void getAvailablePorts();
     qint64 bytesAvailable();
+    bool receivedNewData();
 
     QList<QSerialPortInfo> availablePorts;
     QSerialPort * serial;
@@ -39,6 +40,7 @@ public:
 
 private:
     SerialParameters serialParameters;
+    QByteArray dataReceived;
 };
 
 

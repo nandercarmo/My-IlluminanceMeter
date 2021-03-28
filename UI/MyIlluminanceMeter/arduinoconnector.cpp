@@ -3,6 +3,7 @@
 ArduinoConnector::ArduinoConnector(QObject * parent) :
     QObject(parent) {
 
+    this->dataReceived.clear();
     this->serial = new QSerialPort(this);
     this->isConnected =  false;
     this->getAvailablePorts();
@@ -71,16 +72,27 @@ void ArduinoConnector::sendData(char data) {
 
 qint64 ArduinoConnector::bytesAvailable(){
     qint64 bytesAvailable = this->serial->bytesAvailable();
-    qDebug() << "Bytes:" << bytesAvailable;
+    //qDebug() << "Bytes:" << bytesAvailable;
     return bytesAvailable;
+}
+
+bool ArduinoConnector::receivedNewData() {
+
+    char data[2];
+    this->serial->readLine(data, sizeof (data));
+    this->dataReceived.append(data[0]);
+
+    if(data[0] == '\n') {
+
+        this->dataReceived.append('\0');
+        return true;
+
+    } else return false;
 }
 
 QByteArray ArduinoConnector::readData() {
 
-    char data[20];
-
-    this->serial->readLine(data, sizeof (data));
-    //qDebug() << data.fromHex(data);
-    QByteArray data2 = QByteArray(data);
-    return data2;
+    QByteArray newData = this->dataReceived;
+    this->dataReceived.clear();
+    return newData;
 }
