@@ -1,4 +1,14 @@
 #	💡	My-IlluminanceMeter
+
+<div align="left">
+    <img src="https://img.shields.io/badge/language-c%2B%2B-blue">
+    <img src="https://img.shields.io/badge/app-qt-brightgreen">
+    <img src="https://img.shields.io/badge/hardware-arduino--uno-green">
+    <img src="https://img.shields.io/badge/license-MIT-blueviolet">
+</div>
+
+---
+
 This project implemented an illuminance measurement system, based on the BPW34 photodiode and was developed as practical work in the discipline "Measurement Systems" in the Electrical Engineering course at UFMG.  In addition to the data acquisition and processing system based on Arduino UNO, the project has a graphical data visualization interface developed in QT C ++.
 
 <p align="center">
